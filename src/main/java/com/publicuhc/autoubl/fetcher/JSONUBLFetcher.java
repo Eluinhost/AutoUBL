@@ -1,6 +1,9 @@
 package com.publicuhc.autoubl.fetcher;
 
+import com.publicuhc.autoubl.entries.UBLEntry;
+
 import java.net.URL;
+import java.util.List;
 
 public class JSONUBLFetcher implements UBLFetcher {
 
@@ -10,9 +13,14 @@ public class JSONUBLFetcher implements UBLFetcher {
         m_ublLocation = ublLocation;
     }
 
+    @Override
+    public void fetch() throws UBLFetchException {
+        //TODO
+    }
 
     @Override
-    public void run() {
-        //TODO fetch the ubl json and parse it, then save it to the config file
+    public List<UBLEntry> parse() throws UBLParseException {
+        //TODO
+        return null;
     }
 }
