@@ -8,5 +8,15 @@
     <artifactId>autoubl</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    
+    <name>AutoUBL</name>
+    <inceptionYear>2014</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License 3.0</name>
+            <url>src/main/resources/LICENSE</url>
+            <distribution>repo</distribution>
+            <comments>License for UltraHardcore</comments>
+        </license>
+    </licenses>
 </project>
