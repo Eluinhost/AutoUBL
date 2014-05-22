@@ -1,0 +1,8 @@
+name: AutoUBL
+main: com.publicuhc.autoubl.AutoUBLEntry
+version: 1.0.0
+description: Automatically ban player's on the UBL
+author: ghowden/Eluinhost
+database: false
+commands:
+permissions:
