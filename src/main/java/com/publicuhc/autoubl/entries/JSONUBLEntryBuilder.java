@@ -26,35 +26,35 @@ public class JSONUBLEntryBuilder implements UBLEntryBuilder {
 
         Object uuidNode = m_entryNode.get("uuid");
         if(!(uuidNode instanceof String)) {
-            throw new UBLParseException();
+            throw new UBLParseException("Entry node has an incorrect UUID node: " + m_entryNode);
         }
         String uuidString = (String) uuidNode;
         try {
             UUID uuid = UUID.fromString(uuidString);
             entry.setUUID(uuid);
         } catch (IllegalArgumentException ex) {
-            throw new UBLParseException();
+            throw new UBLParseException("Entry node has an incorrect UUID node: " + m_entryNode);
         }
 
         Object reasonNode = m_entryNode.get("reason");
         if(!(reasonNode instanceof String)) {
-            throw new UBLParseException();
+            throw new UBLParseException("Entry node has an incorrect reason node: " + m_entryNode);
         }
         entry.setReason((String) reasonNode);
 
         Object dateExpiresNode = m_entryNode.get("expiryDate");
         if(!(dateExpiresNode instanceof String)) {
-            throw new UBLParseException();
+            throw new UBLParseException("Entry node has an incorrect expiry date node: " + m_entryNode);
         }
         try {
             entry.setExpiryDate(m_dateFormat.parse((String) dateExpiresNode));
         } catch (ParseException e) {
-            throw new UBLParseException();
+            throw new UBLParseException("Entry node has an incorrectly formatted date node: " + m_entryNode);
         }
 
         Object courtroomPost = m_entryNode.get("courtroom");
         if(!(courtroomPost instanceof String)) {
-            throw new UBLParseException();
+            throw new UBLParseException("Entry node has an incorrect courtroom post node: " + m_entryNode);
         }
         entry.setCourtroomPost((String) courtroomPost);
         return entry;

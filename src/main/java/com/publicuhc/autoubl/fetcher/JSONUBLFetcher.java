@@ -31,7 +31,7 @@ public class JSONUBLFetcher implements UBLFetcher {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
             StringBuilder jsonStringBuilder = new StringBuilder();
-            String tempLine = null;
+            String tempLine;
             while ((tempLine = reader.readLine()) != null) {
                 jsonStringBuilder.append(tempLine);
             }
@@ -55,13 +55,13 @@ public class JSONUBLFetcher implements UBLFetcher {
             Object rootNode = m_jsonParser.parse(jsonString);
 
             if(!(rootNode instanceof JSONArray)) {
-                throw new UBLParseException();
+                throw new UBLParseException("Root node is not an array");
             }
             JSONArray entrylist = (JSONArray) rootNode;
 
             for(Object entryNode : entrylist) {
                 if(!(entryNode instanceof JSONObject)) {
-                    throw new UBLParseException();
+                    throw new UBLParseException("Entry is list is not an object: " + entrylist);
                 }
                 JSONObject entry = (JSONObject) entryNode;
                 JSONUBLEntryBuilder builder = new JSONUBLEntryBuilder(entry);
@@ -69,7 +69,7 @@ public class JSONUBLFetcher implements UBLFetcher {
                 entries.add(builder.build());
             }
         } catch (ParseException e) {
-            throw new UBLParseException();
+            throw new UBLParseException("Failed to parse the JSON as valid");
         }
         return entries;
     }
