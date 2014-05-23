@@ -3,71 +3,62 @@ package com.publicuhc.autoubl.entries;
 import java.util.Date;
 import java.util.UUID;
 
-public interface UBLEntry {
+public class UBLEntry {
 
-    /**
-     * @return The UUID of the banned account
-     */
-    UUID getUUID();
+    private UUID m_uuid;
+    private String m_reason;
+    private Date m_expiryDate;
+    private String m_courtroomPost;
 
-    /**
-     * @param uuid the UUID to ban
-     * @return this
-     */
-    UBLEntry setUUID(UUID uuid);
+    public UUID getUUID() {
+        return m_uuid;
+    }
 
-    /**
-     * @return The reason for the ban
-     */
-    String getReason();
+    public UBLEntry setUUID(UUID uuid) {
+        m_uuid = uuid;
+        return this;
+    }
 
-    /**
-     * @param reason the reason for the ban
-     * @return this
-     */
-    UBLEntry setReason(String reason);
+    public String getReason() {
+        return m_reason;
+    }
 
-    /**
-     * @return the date banned
-     */
-    Date getDateBanned();
+    public UBLEntry setReason(String reason) {
+        m_reason = reason;
+        return this;
+    }
 
-    /**
-     * @param banned the date banned
-     * @return this
-     */
-    UBLEntry setDateBanned(Date banned);
+    public Date getExpiryDate() {
+        return m_expiryDate;
+    }
 
-    /**
-     * @return the length of the ban to show
-     */
-    String lengthOfBan();
+    public UBLEntry setExpiryDate(Date expiryDate) {
+        m_expiryDate = expiryDate;
+        return this;
+    }
 
-    /**
-     * @param lengthOfBan the length of ban to show
-     * @return this
-     */
-    UBLEntry setLengthOfBan(String lengthOfBan);
+    public String getCourtroomPost() {
+        return m_courtroomPost;
+    }
 
-    /**
-     * @return the date for unban
-     */
-    Date getExpiryDate();
+    public UBLEntry setCourtroomPost(String courtroomPost) {
+        m_courtroomPost = courtroomPost;
+        return this;
+    }
 
-    /**
-     * @param expiryDate the date for unban
-     * @return this
-     */
-    UBLEntry setExpiryDate(Date expiryDate);
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
 
-    /**
-     * @return the URL to the courtroom post
-     */
-    String getCourtroomPost();
+        builder.append("UUID: ")
+                .append(m_uuid.toString())
+                .append(", Reason: ")
+                .append(m_reason)
+                .append(", Date Unbanned: ")
+                .append(m_expiryDate)
+                .append(", Courtroom Post: ")
+                .append(m_courtroomPost);
 
-    /**
-     * @param courtroomPost the URL to the post
-     * @return this
-     */
-    UBLEntry setCourtroomPost(String courtroomPost);
+        return builder.toString();
+    }
 }
