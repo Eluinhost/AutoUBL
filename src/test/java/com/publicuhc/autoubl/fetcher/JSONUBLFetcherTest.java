@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,5 +43,29 @@ public class JSONUBLFetcherTest {
 
         assertThat(firstentry.getCourtroomPost()).isEqualTo("http://google.com");
         assertThat(secondentry.getCourtroomPost()).isEqualTo("http://publicuhc.com");
+    }
+
+    @Test(expected = UBLParseException.class)
+    public void invalidJSON() throws UBLFetchException, UBLParseException {
+        URL fileURL = getClass().getResource("/invalidJSON.json");
+        JSONUBLFetcher fetcher = new JSONUBLFetcher(fileURL);
+
+        fetcher.fetch();
+    }
+
+    @Test(expected = UBLParseException.class)
+    public void invalidStructureJSON() throws UBLFetchException, UBLParseException {
+        URL fileURL = getClass().getResource("/invalidStructureJSON.json");
+        JSONUBLFetcher fetcher = new JSONUBLFetcher(fileURL);
+
+        fetcher.fetch();
+    }
+
+    @Test(expected = UBLFetchException.class)
+    public void invalidLocationJSON() throws UBLFetchException, UBLParseException, MalformedURLException {
+        URL fileURL = new URL("http://www.sdjfh93893fhdhf398hfdshfjkshfefh.com"); //if someone registers this I will kill you
+        JSONUBLFetcher fetcher = new JSONUBLFetcher(fileURL);
+
+        fetcher.fetch();
     }
 }
