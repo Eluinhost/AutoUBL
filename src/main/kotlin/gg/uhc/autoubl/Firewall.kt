@@ -38,6 +38,13 @@ class Firewall (
     // only used when there is no UUID support
     private val ignToUuidCache: MutableMap<String, UUID> = ConcurrentHashMap()
 
+    // when we startup trigger UUID lookups for every online users if we need to
+    init {
+        if (uuidField == null) {
+            getOnlinePlayers().forEach { callEvent(RequestUuidLookupEvent(it.name)) }
+        }
+    }
+
     // Checks the list of players against the ban list and kicks them if required
     private fun kickBannedPlayers(toCheck: Iterable<Player>) {
         val toKick = toCheck.mapNotNull {
