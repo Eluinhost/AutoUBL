@@ -25,7 +25,8 @@ class Firewall (
     private val uninitializedMessage: String,
     private val failedToLookupUuidMessage: String,
     private val getOnlinePlayers: () -> Array<Player>,
-    private val callEvent: (Event) -> Unit
+    private val callEvent: (Event) -> Unit,
+    private val onNextTick: (() -> Unit) -> Unit
 ) : Listener {
 
     // these 2 extension pull the correct UUID if UUID is supported otherwise attempts to pull the UUID from the cache
@@ -38,8 +39,8 @@ class Firewall (
     private val ignToUuidCache: MutableMap<String, UUID> = ConcurrentHashMap()
 
     // Checks the list of players against the ban list and kicks them if required
-    private fun kickBannedPlayers(toCheck: Iterable<Player>) = toCheck
-        .mapNotNull {
+    private fun kickBannedPlayers(toCheck: Iterable<Player>) {
+        val toKick = toCheck.mapNotNull {
             val maybeUuid = it.safeUuid ?: return@mapNotNull null // we don't know their uuid yet so we want to skip them (will be picked up once UUID lookup request is complete)
 
             val bans = banMatcher.checkUuidStatus(maybeUuid)
@@ -49,9 +50,13 @@ class Firewall (
 
             it to bans // return pair of player -> non empty list of bans
         }
-        .forEach { (player, bans) ->
-            player.kickPlayer(banMessageFormatter.format(bans.maxBy { it.expires }!!))
+
+        onNextTick {
+            toKick.forEach { (player, bans) ->
+                player.kickPlayer(banMessageFormatter.format(bans.maxBy { it.expires }!!))
+            }
         }
+    }
 
     // when parsed event comes in kick every online player on the ban list where we can
     // runs at high priority so it runs after the ban matcher has been updated with new data
@@ -70,11 +75,13 @@ class Firewall (
 
     // If there is a failure to lookup UUIDs kick every online player in the batch
     @EventHandler fun on(event: UuidFailedLookupEvent) {
-        getOnlinePlayers()
-            .filter { event.requested.contains(it.name) }
-            .forEach {
+        val toKick = getOnlinePlayers().filter { event.requested.contains(it.name) }
+
+        onNextTick {
+            toKick.forEach {
                 it.kickPlayer(failedToLookupUuidMessage)
             }
+        }
     }
 
     @EventHandler fun on(event: AsyncPlayerPreLoginEvent) {

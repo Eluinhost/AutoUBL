@@ -13,6 +13,9 @@ class Entry : JavaPlugin(), Listener {
     private fun runAsync(block: () -> Unit) {
         server.scheduler.scheduleAsyncDelayedTask(this, block)
     }
+    private fun onNextTick(block: () -> Unit) {
+        server.scheduler.scheduleSyncDelayedTask(this, block)
+    }
 
     private val callEvent = server.pluginManager::callEvent
 
@@ -96,7 +99,8 @@ class Entry : JavaPlugin(), Listener {
             logger = logger,
             uninitializedMessage = uninitializedMessage,
             callEvent = callEvent,
-            failedToLookupUuidMessage = failedToLookupUuidMessage
+            failedToLookupUuidMessage = failedToLookupUuidMessage,
+            onNextTick = this::onNextTick
         )
 
         listOf(apis, backups, banMatcher, firewall, parser).forEach {
