@@ -1,6 +1,6 @@
 minutes per refresh: 10
 ubl endpoint: https://hosts.uhc.gg/api/ubl/current
-mojangUuidEndpoint: https://api.mojang.com/profiles/minecraft
+mojang uuid endpoint: https://api.mojang.com/profiles/minecraft
 ban template: "&c{ign} ({uuid}) is banned - {reason} ({link}), expires: {expires}"
 uninitialized message: Please wait, ban list is loading
 failed to lookup uuid message: Failed to lookup UUID for your username
