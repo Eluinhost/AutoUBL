@@ -4,7 +4,7 @@ import org.bukkit.ChatColor
 import java.text.SimpleDateFormat
 
 class BanMessageFormatter(private val template: String) {
-    private val dateFormat = SimpleDateFormat("YYYY-MM-DD")
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
     fun format(item: UblItem): String = ChatColor.translateAlternateColorCodes('&', template
         .replace("{ign}", item.ign, true)
