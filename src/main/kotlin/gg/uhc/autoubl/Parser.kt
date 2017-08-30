@@ -18,6 +18,8 @@ class Parser(
 ): Listener {
     private val gson = Gson()
 
+    private val noDashUuidRegex = "^([a-f0-9]{8})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{12})$".toRegex(RegexOption.IGNORE_CASE)
+
     fun parseUblItems(raw: String): List<UblItem> = gson.fromJson(raw)
 
     fun parseUuidsResponse(raw: String): Map<String, UUID> =
@@ -25,7 +27,12 @@ class Parser(
             .fromJson<List<UuidResponseItem>>(raw)
             .mapNotNull {
                 val uuid = try {
-                    UUID.fromString(it.id)
+                    when (it.id.length) {
+                        // In know there is more efficient ways to do this, but whatever
+                        32 -> UUID.fromString(it.id.replace(noDashUuidRegex, "$1-$2-$3-$4-$5"))
+                        36 -> UUID.fromString(it.id)
+                        else -> throw IllegalArgumentException("invalid input length")
+                    }
                 } catch (ex: Exception) {
                     logger.log(Level.SEVERE, "UNABLE TO PARSE UUID FROM MOJANG: $it", ex)
                     null
