@@ -2,6 +2,7 @@ package gg.uhc.autoubl
 
 import gg.uhc.autoubl.events.ParsedEvent
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import java.util.*
 
@@ -21,9 +22,5 @@ class BanMatcher: Listener {
 
         val now = Date()
         return bansByUuid[uuid].orEmpty().filter { it.expires > now }
-    }
-
-    @EventHandler fun on(event: ParsedEvent) {
-        updateBans(event.bans)
     }
 }

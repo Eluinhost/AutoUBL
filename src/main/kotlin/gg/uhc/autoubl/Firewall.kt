@@ -58,9 +58,8 @@ class Firewall (
         }
     }
 
-    // when parsed event comes in kick every online player on the ban list where we can
-    // runs at high priority so it runs after the ban matcher has been updated with new data
-    @EventHandler(priority = EventPriority.HIGH) fun on(event: ParsedEvent) {
+    @EventHandler fun on(event: ParsedEvent) {
+        banMatcher.updateBans(event.bans)
         kickBannedPlayers(getOnlinePlayers().asIterable())
     }
 
